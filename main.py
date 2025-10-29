@@ -152,7 +152,7 @@ async def contact_post(request: Request):
         )
         return templates.TemplateResponse(
             "contact.html",
-            {"request": request, "page": "other", "success": note, "error": None},
+            {"request": request, "page": "other", "success": None, "error": note},
         )
 
 

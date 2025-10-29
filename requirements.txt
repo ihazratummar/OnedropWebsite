@@ -1,5 +1,6 @@
 fastapi
-uvicorn
-jinja2
-gunicorn
+Jinja2
+python-multipart
 python-dotenv
+requests
+uvicorn

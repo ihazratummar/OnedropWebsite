@@ -7,9 +7,13 @@
     --brand-red: #ef4444;
     --muted: #6b7280;
   }
-  body {
-    @apply font-sans antialiased text-gray-800;
-  }
+body {
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    color: #1f2937;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 }
 
 /* Test class to verify build */

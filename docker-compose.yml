@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   onedrop:
     image: onedrop-website
@@ -16,13 +14,3 @@ services:
     environment:
       - PORT=8080
       - ENVIRONMENT=production
-    volumes:
-      - ./static:/app/static
-      - ./templates:/app/templates
-
-networks:
-  custom_bridge:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.25.0.0/16

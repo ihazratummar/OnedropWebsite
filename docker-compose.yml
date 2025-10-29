@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  onedrop:
+    image: onedrop-website
+    container_name: onedrop-website
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      custom_bridge:
+        ipv4_address: 172.25.0.13
+    environment:
+      - PORT=8080
+      - ENVIRONMENT=production
+    volumes:
+      - ./static:/app/static
+      - ./templates:/app/templates
+
+networks:
+  custom_bridge:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16

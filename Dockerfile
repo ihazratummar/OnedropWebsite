@@ -1,57 +1,70 @@
-# ================================
-# Stage 1: Build Tailwind CSS
-# ================================
-FROM node:20-alpine AS frontend-builder
+# ==============================
+# 1️⃣ FRONTEND BUILD STAGE
+# ==============================
+FROM node:20-alpine AS frontend
 
 WORKDIR /app
 
-# Copy package files first for caching
+# Copy package files and install deps
 COPY package*.json ./
-RUN npm install 
+RUN npm ci --quiet
 
-# Copy Tailwind and PostCSS configs
+# Copy ALL necessary files for Tailwind to scan
 COPY tailwind.config.js postcss.config.js ./
+COPY static/ ./static/
+COPY templates/ ./templates/
 
-# Copy static assets (CSS, JS, images)
-COPY static ./static
+# Debug: Show what files Tailwind can see
+RUN echo "=== Files in templates directory ===" && \
+    find templates -type f && \
+    echo "=== Content of tailwind.config.js ===" && \
+    cat tailwind.config.js && \
+    echo "=== Building CSS ===" && \
+    npx tailwindcss -i ./static/input.css -o ./static/style.css --minify -v && \
+    echo "=== Generated CSS size ===" && \
+    wc -c ./static/style.css && \
+    echo "=== First 500 chars of CSS ===" && \
+    head -c 500 ./static/style.css
 
-# Build Tailwind (input.css -> style.css)
-RUN npx tailwindcss -i ./static/input.css -o ./static/style.css --minify
-
-
-# ================================
-# Stage 2: FastAPI Backend
-# ================================
+# ==============================
+# 2️⃣ BACKEND PRODUCTION STAGE
+# ==============================
 FROM python:3.11-slim AS backend
 
 WORKDIR /app
 
-# Environment variables
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PORT=8080
-
-# Install system dependencies
+# Install system deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential curl && \
+    build-essential && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install deps
+# Copy Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt gunicorn uvicorn[standard]
+RUN pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir gunicorn
 
-# Copy backend files
-COPY main.py .
-COPY templates ./templates
-COPY *.md ./
-COPY *.txt ./
+# Copy app code
+COPY main.py ./
+COPY templates/ ./templates/
+COPY --from=frontend /app/static ./static
+COPY assetlinks.json app-ads.txt ./
 
-# Copy optimized static files
-COPY --from=frontend-builder /app/static ./static
+# Security: create non-root user
+RUN useradd -m appuser && chown -R appuser:appuser /app
+USER appuser
 
-EXPOSE 8080
+# Environment
+ENV PORT=8383
+ENV ENVIRONMENT=production
 
-# ================================
-# Start command (Gunicorn + Uvicorn)
-# ================================
-CMD ["gunicorn", "main:app", "-k", "uvicorn.workers.UvicornWorker", "--workers", "2", "--bind", "0.0.0.0:8080", "--timeout", "60"]
+# Expose port
+EXPOSE 8383
+
+# ==============================
+# 3️⃣ STARTUP COMMAND
+# ==============================
+CMD ["gunicorn", "main:app", \
+     "--workers", "4", \
+     "--worker-class", "uvicorn.workers.UvicornWorker", \
+     "--bind", "0.0.0.0:8383", \
+     "--access-logfile", "-"]

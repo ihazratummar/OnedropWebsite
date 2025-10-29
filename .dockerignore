@@ -13,12 +13,6 @@ __pycache__/
 .env.local
 .DS_Store
 
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
 # Docker specific
 Dockerfile
 .dockerignore

@@ -12,6 +12,11 @@
   }
 }
 
+/* Test class to verify build */
+.test-style {
+  @apply bg-red-500 text-white p-4;
+}
+
 @layer components {
   .container {
     @apply mx-auto px-4 sm:px-6 lg:px-8;

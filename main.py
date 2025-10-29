@@ -3,12 +3,26 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+import os
+
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
 
-templates = Jinja2Templates(directory="templates")
+# Ensure static directory exists
+if not os.path.exists(STATIC_DIR):
+    os.makedirs(STATIC_DIR)
+
+# Mount static files with explicit content types
+app.mount("/static", StaticFiles(
+    directory=STATIC_DIR,
+    check_dir=True,
+    html=True
+), name="static")
+
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 # Load assetlinks from file
 try:

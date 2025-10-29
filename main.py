@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import os
+from dotenv import load_dotenv
 
 
 app = FastAPI()
@@ -23,6 +24,9 @@ app.mount(
 )
 
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+
+# Load environment variables from .env if present
+load_dotenv()
 
 
 # Load assetlinks from file
@@ -48,6 +52,108 @@ async def root(request: Request):
     return templates.TemplateResponse(
         "index.html", {"request": request, "page": "home"}
     )
+
+
+@app.get("/contact", response_class=HTMLResponse)
+async def contact_get(request: Request):
+    # render contact form
+    return templates.TemplateResponse(
+        "contact.html",
+        {"request": request, "page": "other", "success": None, "error": None},
+    )
+
+
+@app.post("/contact", response_class=HTMLResponse)
+async def contact_post(request: Request):
+    form = await request.form()
+    name = form.get("name", "").strip()
+    email = form.get("email", "").strip()
+    subject = form.get("subject", "").strip()
+    message = form.get("message", "").strip()
+
+    # basic validation
+    if not name or not email or not subject or not message:
+        return templates.TemplateResponse(
+            "contact.html",
+            {
+                "request": request,
+                "page": "other",
+                "error": "Please fill all fields.",
+                "success": None,
+            },
+        )
+
+    if "@" not in email or "." not in email:
+        return templates.TemplateResponse(
+            "contact.html",
+            {
+                "request": request,
+                "page": "other",
+                "error": "Please provide a valid email address.",
+                "success": None,
+            },
+        )
+
+    # compose email
+    to_addr = os.getenv("CONTACT_EMAIL", "support@onedrops.online")
+    from_addr = os.getenv("SMTP_FROM", email)
+    body = f"From: {name} <{email}>\nTo: {to_addr}\nSubject: {subject}\n\n{message}\n"
+
+    # try to send via SMTP if configured
+    smtp_host = os.getenv("SMTP_HOST")
+    smtp_port = int(os.getenv("SMTP_PORT", "587")) if os.getenv("SMTP_PORT") else None
+    smtp_user = os.getenv("SMTP_USER")
+    smtp_pass = os.getenv("SMTP_PASS")
+    sent = False
+    send_error = None
+    if smtp_host and smtp_port:
+        try:
+            import smtplib
+
+            server = smtplib.SMTP(smtp_host, smtp_port, timeout=10)
+            server.ehlo()
+            try:
+                server.starttls()
+            except Exception:
+                pass
+            if smtp_user and smtp_pass:
+                server.login(smtp_user, smtp_pass)
+            server.sendmail(from_addr, [to_addr], body.encode("utf-8"))
+            server.quit()
+            sent = True
+        except Exception as e:
+            send_error = str(e)
+            sent = False
+    else:
+        # no SMTP configured — log the message to server logs instead
+        try:
+            print("--- Contact form message (no SMTP configured) ---")
+            print(body)
+            print("--- end message ---")
+        except Exception:
+            pass
+        sent = False
+
+    if sent:
+        return templates.TemplateResponse(
+            "contact.html",
+            {
+                "request": request,
+                "page": "other",
+                "success": "Thanks — your message was sent. We'll reply to you soon.",
+                "error": None,
+            },
+        )
+    else:
+        note = (
+            "Your message was received but the site couldn't send email (not configured)."
+            if not send_error
+            else f"Message could not be delivered: {send_error}"
+        )
+        return templates.TemplateResponse(
+            "contact.html",
+            {"request": request, "page": "other", "success": note, "error": None},
+        )
 
 
 @app.get("/privacy-policy", response_class=HTMLResponse)

@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.hazrat.onedrop",
+      "sha256_cert_fingerprints": [
+        "5B:EE:11:2A:72:1D:49:E6:C9:CC:9C:7A:21:1E:B2:40:E4:C1:AC:C5:C6:33:71:8A:6C:6F:A6:07:6F:92:AA:87"
+      ]
+    }
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "name": "onedrop-fastapi",
+  "version": "1.0.0",
+  "description": "FastAPI landing page for OneDrop",
+  "main": "index.js",
+  "scripts": {
+    "tailwind:build": "tailwindcss -i ./static/input.css -o ./static/style.css",
+    "tailwind:watch": "tailwindcss -i ./static/input.css -o ./static/style.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.0.0"
+  }
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneDrop</title>
+    <link rel="icon" href="{{ url_for('static', path='images/onedrop_logo.png') }}" type="image/png">
+    <meta name="description" content="OneDrop - Connects blood donors and recipients. Find blood donors nearby or register to save lives.">
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "OneDrop",
+      "operatingSystem": "Android",
+      "applicationCategory": "https://schema.org/MedicalApplication",
+      "image": "{{ url_for('static', path='images/onedrop_logo.png') }}",
+      "description": "OneDrop - Connects blood donors and recipients. Find blood donors nearby or register to save lives.",
+      "url": "https://onedrops.online",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Hazrat Ummar Shaikh",
+      "url": "https://hazratdev.top",
+      "logo": "{{ url_for('static', path='images/onedrop_logo.png') }}",
+      "sameAs": [
+        "https://hazratdev.top"
+      ]
+    }
+    </script>
+</head>
+
+<body class="font-sans antialiased">
+    <div>
+        {% include "header.html" %}
+
+        <main>
+            {% include "hero.html" %}
+            <div class="container mx-auto px-6 space-y-20">
+                {% include "features.html" %}
+                {% include "how_it_works.html" %}
+                {% include "cta.html" %}
+            </div>
+        </main>
+
+        {% include "footer.html" %}
+    </div>
+    <script src="{{ url_for('static', path='main.js') }}"></script>
+</body>
+
+</html>

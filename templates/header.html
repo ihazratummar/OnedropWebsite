@@ -1,7 +1,8 @@
-<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 {% if page == 'home' %} bg-transparent text-white {% else %} bg-white text-gray-800 shadow-md {% endif %} py-4">
+<header
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 {% if page == 'home' %} bg-transparent text-white {% else %} bg-white text-gray-800 shadow-md {% endif %} py-4">
   <div class="container mx-auto flex items-center justify-between">
     <a href="/" class="flex items-center gap-3">
-      <img src="{{ url_for('static', path='images/onedrop_logo.png') }}" alt="OneDrop Logo" class="w-10 h-10">
+      <img src="{{ url_for('static', path='images/onedrop_logo.png') }}" alt="OneDrop Logo" class="h-12 w-auto">
       <div class="font-semibold text-xl">OneDrop</div>
     </a>
     <nav class="hidden md:flex items-center gap-8">
@@ -9,10 +10,14 @@
       <a href="#features" class="hover:text-red-200 transition-colors">Features</a>
       <a href="#how" class="hover:text-red-200 transition-colors">How it works</a>
       {% endif %}
-      <a href="#download" class="{% if page == 'home' %}bg-white text-red-600{% else %}bg-red-600 text-white{% endif %} px-4 py-2 rounded-full font-semibold hover:bg-red-100 transition-colors">Get the app</a>
+      <a href="#download"
+        class="{% if page == 'home' %}bg-white text-red-600{% else %}bg-red-600 text-white{% endif %} px-4 py-2 rounded-full font-semibold hover:bg-red-100 transition-colors">Get
+        the app</a>
     </nav>
     <button class="md:hidden text-white">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+      </svg>
     </button>
   </div>
 </header>

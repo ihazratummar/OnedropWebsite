@@ -16,13 +16,14 @@ if not os.path.exists(STATIC_DIR):
     os.makedirs(STATIC_DIR)
 
 # Mount static files with explicit content types
-app.mount("/static", StaticFiles(
-    directory=STATIC_DIR,
-    check_dir=True,
-    html=True
-), name="static")
+app.mount(
+    "/static",
+    StaticFiles(directory=STATIC_DIR, check_dir=True, html=True),
+    name="static",
+)
 
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+
 
 # Load assetlinks from file
 try:

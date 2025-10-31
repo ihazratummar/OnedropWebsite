@@ -44,7 +44,7 @@ RUN pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir gunicorn
 
 # Copy app code
-COPY main.py ./
+COPY *.py ./
 COPY templates/ ./templates/
 COPY --from=frontend /app/static ./static
 COPY assetlinks.json app-ads.txt ./
@@ -64,7 +64,7 @@ EXPOSE 8383
 # 3️⃣ STARTUP COMMAND
 # ==============================
 CMD ["gunicorn", "main:app", \
-     "--workers", "4", \
-     "--worker-class", "uvicorn.workers.UvicornWorker", \
-     "--bind", "0.0.0.0:8383", \
-     "--access-logfile", "-"]
+    "--workers", "4", \
+    "--worker-class", "uvicorn.workers.UvicornWorker", \
+    "--bind", "0.0.0.0:8383", \
+    "--access-logfile", "-"]

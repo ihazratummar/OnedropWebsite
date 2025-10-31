@@ -5,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import os
 from dotenv import load_dotenv
-
+from sitemap_generator import generate_sitemap
 
 app = FastAPI()
 
@@ -45,6 +45,12 @@ async def get_assetlinks():
 @app.get("/app-ads.txt")
 async def get_app_ads():
     return FileResponse("app-ads.txt", media_type="text/plain")
+
+
+@app.get("/sitemap.xml")
+async def get_sitemap():
+    generate_sitemap()
+    return FileResponse("static/sitemap.xml", media_type="application/xml")
 
 
 @app.get("/", response_class=HTMLResponse)

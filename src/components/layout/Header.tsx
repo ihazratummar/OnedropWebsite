@@ -20,15 +20,15 @@ export function Header() {
   }, []);
 
   const navLinks = [
-    { name: "Features", href: "/#features" },
     { name: "How it works", href: "/#how" },
+    { name: "Features", href: "/#features" },
   ];
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4",
-        isScrolled ? "bg-white text-gray-800 shadow-md" : "bg-transparent text-white"
+        isScrolled ? "bg-white text-gray-800 shadow-md" : "bg-white/80 backdrop-blur-md text-gray-800 shadow-sm"
       )}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
@@ -40,7 +40,7 @@ export function Header() {
             height={50}
             className="object-contain hover:scale-105 transition-transform duration-200"
           />
-          <div className={cn("font-bold text-xl tracking-tight", isScrolled ? "text-gray-900" : "text-white")}>
+          <div className="font-bold text-xl tracking-tight text-gray-900">
             OneDrop
           </div>
         </Link>
@@ -51,22 +51,14 @@ export function Header() {
             <Link
               key={link.name}
               href={link.href}
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-red-500",
-                isScrolled ? "text-gray-600" : "text-gray-200 hover:text-white"
-              )}
+              className="text-sm font-medium text-gray-600 transition-colors hover:text-red-600"
             >
               {link.name}
             </Link>
           ))}
           <Link
             href="/#download"
-            className={cn(
-              "px-6 py-2.5 rounded-full font-semibold text-sm transition-all transform hover:scale-105 active:scale-95 shadow-lg",
-              isScrolled
-                ? "bg-red-600 text-white hover:bg-red-700 hover:shadow-red-600/20"
-                : "bg-white text-red-600 hover:bg-gray-50"
-            )}
+            className="px-6 py-2.5 rounded-full font-semibold text-sm bg-red-600 text-white hover:bg-red-700 transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-red-600/20"
           >
             Get the app
           </Link>
@@ -79,9 +71,9 @@ export function Header() {
           aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? (
-            <X className={cn("w-6 h-6", isScrolled ? "text-gray-800" : "text-white")} />
+            <X className="w-6 h-6 text-gray-800" />
           ) : (
-            <Menu className={cn("w-6 h-6", isScrolled ? "text-gray-800" : "text-white")} />
+            <Menu className="w-6 h-6 text-gray-800" />
           )}
         </button>
       </div>

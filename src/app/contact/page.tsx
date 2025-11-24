@@ -40,7 +40,7 @@ export default function ContactPage() {
     const [state, formAction] = useActionState(sendContactEmail, initialState);
 
     return (
-        <div className="min-h-screen bg-gray-50 py-32 px-4">
+        <div className="min-h-screen bg-gray-50 py-12 md:py-32 px-4">
             <div className="container mx-auto max-w-4xl">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -48,9 +48,9 @@ export default function ContactPage() {
                     className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row"
                 >
                     {/* Contact Info Side */}
-                    <div className="bg-gray-900 text-white p-12 md:w-1/3 flex flex-col justify-between relative overflow-hidden">
+                    <div className="bg-gray-900 text-white p-8 md:p-12 md:w-1/3 flex flex-col justify-between relative overflow-hidden">
                         <div className="relative z-10">
-                            <h2 className="text-3xl font-bold mb-6">Get in touch</h2>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-6">Get in touch</h2>
                             <p className="text-gray-300 mb-8">
                                 Have questions about the app or want to contribute? We'd love to hear from you.
                             </p>
@@ -74,7 +74,7 @@ export default function ContactPage() {
                     </div>
 
                     {/* Form Side */}
-                    <div className="p-12 md:w-2/3 bg-white relative">
+                    <div className="p-8 md:p-12 md:w-2/3 bg-white relative">
                         {state.success ? (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
@@ -96,8 +96,8 @@ export default function ContactPage() {
                                 </button>
                             </motion.div>
                         ) : (
-                            <form action={formAction} className="space-y-6">
-                                <div className="grid md:grid-cols-2 gap-6">
+                            <form action={formAction} className="space-y-6" suppressHydrationWarning>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                         <label htmlFor="name" className="text-sm font-medium text-gray-700">
                                             Name
@@ -108,6 +108,7 @@ export default function ContactPage() {
                                             name="name"
                                             className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
                                             placeholder="John Doe"
+                                            suppressHydrationWarning
                                         />
                                         {state.errors?.name && (
                                             <p className="text-sm text-red-500">{state.errors.name[0]}</p>
@@ -123,6 +124,7 @@ export default function ContactPage() {
                                             name="email"
                                             className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
                                             placeholder="john@example.com"
+                                            suppressHydrationWarning
                                         />
                                         {state.errors?.email && (
                                             <p className="text-sm text-red-500">{state.errors.email[0]}</p>
@@ -140,6 +142,7 @@ export default function ContactPage() {
                                         name="subject"
                                         className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
                                         placeholder="How can we help?"
+                                        suppressHydrationWarning
                                     />
                                     {state.errors?.subject && (
                                         <p className="text-sm text-red-500">{state.errors.subject[0]}</p>
@@ -156,6 +159,7 @@ export default function ContactPage() {
                                         rows={4}
                                         className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all resize-none"
                                         placeholder="Your message..."
+                                        suppressHydrationWarning
                                     />
                                     {state.errors?.message && (
                                         <p className="text-sm text-red-500">{state.errors.message[0]}</p>

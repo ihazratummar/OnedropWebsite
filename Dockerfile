@@ -61,7 +61,7 @@ RUN chown -R nextjs:nodejs /app
 USER nextjs
 
 # Expose port 3000
-EXPOSE 3000
+EXPOSE 8383
 
 # Set port environment variable
 ENV PORT=3000

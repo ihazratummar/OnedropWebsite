@@ -9,14 +9,14 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
-RUN npm ci --only=production --ignore-scripts
+# Install ALL dependencies (including devDependencies needed for build)
+RUN npm ci
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
 
-# Copy dependencies from deps stage
+# Copy ALL dependencies from deps stage (includes TypeScript, etc.)
 COPY --from=deps /app/node_modules ./node_modules
 
 # Copy source files
@@ -26,10 +26,16 @@ COPY . .
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build the application
+# Build the application (TypeScript is now available)
 RUN npm run build
 
-# Production image, copy all the files and run next
+# Production image - install only production dependencies
+FROM base AS prod-deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci --only=production --ignore-scripts
+
+# Final production image
 FROM base AS runner
 WORKDIR /app
 
@@ -40,7 +46,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy necessary files
+# Copy production dependencies
+COPY --from=prod-deps /app/node_modules ./node_modules
+
+# Copy necessary files from builder
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static

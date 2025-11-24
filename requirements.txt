@@ -1,6 +1,0 @@
-fastapi
-Jinja2
-python-multipart
-python-dotenv
-requests
-uvicorn
